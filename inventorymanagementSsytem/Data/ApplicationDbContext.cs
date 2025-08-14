@@ -9,5 +9,6 @@ namespace inventorymanagementSsytem.Data
             : base(options)
         {
         }
+        public DbSet<Models.Product> Products { get; set; }
     }
 }
