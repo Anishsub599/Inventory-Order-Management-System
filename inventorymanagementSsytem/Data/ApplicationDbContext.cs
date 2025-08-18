@@ -10,5 +10,6 @@ namespace inventorymanagementSsytem.Data
         {
         }
         public DbSet<Models.Product> Products { get; set; }
+        public DbSet<Models.Category> Categories { get; set; }
     }
 }

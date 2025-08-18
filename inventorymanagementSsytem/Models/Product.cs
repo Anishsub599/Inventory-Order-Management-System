@@ -18,10 +18,13 @@ namespace inventorymanagementSsytem.Models
         public int StockLevel { get; set; }
 
         public string ImageUrl { get; set; }
-        public Product()
-        {
-            
-        }
+        // Foreign Keys
+        public int CategoryId { get; set; }
+        public Category Category { get; set; }
+
+        
+
+       
 
     }
 }
