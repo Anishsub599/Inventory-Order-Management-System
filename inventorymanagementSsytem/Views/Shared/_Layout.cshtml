@@ -16,21 +16,67 @@
             position: sticky;
             top: 0;
             z-index: 1030;
-            background-color: #011f4b; /* Deep navy */
+            background-color: rgba(1,31,75,1); /* Initial deep navy */
+            transition: background-color 0.3s ease, box-shadow 0.3s ease, padding 0.3s ease;
+            padding: 1rem 1rem;
         }
 
-            .navbar .nav-link, .navbar-brand {
-                color: #fff;
+            /* Scrolled effect */
+            .navbar.scrolled {
+                background-color: rgba(0,191,255,0.95); /* Slightly transparent on scroll */
+                box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+                padding: 0.5rem 1rem; /* Shrink navbar */
             }
 
-                .navbar .nav-link:hover, .navbar .nav-link:focus {
-                    color: #00ffff; /* Electric blue accent */
+            /* Brand / Logo */
+            .navbar .navbar-brand {
+                display: flex;
+                align-items: center;
+                font-size: 1.3rem;
+                transition: font-size 0.3s ease, transform 0.3s ease;
+            }
+
+                .navbar .navbar-brand img {
+                    height: 40px;
+                    width: auto;
+                    margin-right: 10px;
+                    transition: transform 0.3s ease;
                 }
 
+            .navbar.scrolled .navbar-brand img {
+                transform: scale(0.8) translateY(-3px); /* Slight shrink and slide-up */
+            }
+
+            .navbar.scrolled .navbar-brand {
+                font-size: 1.1rem;
+            }
+
+            /* Links */
+            .navbar .nav-link {
+                color: #fff;
+                transition: color 0.3s ease;
+            }
+
+            .navbar.scrolled .nav-link {
+                color: #011f4b;
+            }
+
+            .navbar .nav-link:hover, .navbar .nav-link:focus {
+                color: #00ffff;
+            }
+
+            /* Active page highlighting */
+            .navbar .nav-link.active {
+                font-weight: 600;
+                border-bottom: 2px solid #00ffff;
+            }
+
+            /* Buttons */
             .navbar .btn-accent {
                 color: #011f4b;
                 background-color: #00ffff;
                 border: none;
+                transition: background-color 0.3s ease, color 0.3s ease;
             }
 
                 .navbar .btn-accent:hover {
@@ -40,17 +86,30 @@
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg shadow-sm">
+    <nav id="mainNavbar" class="navbar navbar-expand-lg shadow-sm">
         <div class="container-fluid">
-            <a class="navbar-brand fw-bold" asp-controller="Home" asp-action="Index">InventoryPro</a>
-            <button class="navbar-toggler text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <!-- Logo + Brand -->
+            <a class="navbar-brand fw-bold" asp-controller="Home" asp-action="Index">
+                <img src="~/images/logo.webp" alt="InventoryPro Logo" />
+                InventoryPro
+            </a>
+
+            <button class="navbar-toggler text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" asp-controller="Categories" asp-action="Index">Categories</a></li>
-                    <li class="nav-item"><a class="nav-link" asp-controller="Products" asp-action="Index">Products</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link @(ViewContext.RouteData.Values["controller"].ToString() == "Home" ? "active" : "")" asp-controller="Home" asp-action="Index">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(ViewContext.RouteData.Values["controller"].ToString() == "Categories" ? "active" : "")" asp-controller="Categories" asp-action="Index">Categories</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(ViewContext.RouteData.Values["controller"].ToString() == "Products" ? "active" : "")" asp-controller="Products" asp-action="Index">Products</a>
+                    </li>
                 </ul>
                 <ul class="navbar-nav ms-auto">
                     @if (SignInManager.IsSignedIn(User))
@@ -92,6 +151,17 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Navbar scroll effects: color, shadow, shrink, logo slide
+        const navbar = document.getElementById('mainNavbar');
+        window.addEventListener('scroll', () => {
+          if (window.scrollY > 50) {
+            navbar.classList.add('scrolled');
+          } else {
+            navbar.classList.remove('scrolled');
+          }
+        });
+    </script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>
